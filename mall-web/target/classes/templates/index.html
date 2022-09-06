@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>品牌管理</title>
+</head>
+<body>
+<table border="1px" width="100%">
+    <tr th:each="brand:${brandList}">
+        <td th:text="${brand.id}"></td>
+        <td th:text="${brand.name}"></td>
+        <td th:text="${brand.firstChar}"></td>
+        <td>
+            <a th:href="@{/findBrandByID/{id}(id=${brand.id})}">编辑</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,14 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8899
+spring:
+  application:
+    name: mall-zuul
+zuul:
+  routes:
+    api-query:
+      path: /mall-query/**
+      service-id: mall-manager-ms
