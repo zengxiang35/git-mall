@@ -19,7 +19,7 @@
           :pagination="pagination"
           @change="handleTableChange">
         <template v-slot:action="{text,record}">
-          <a-button type="primary">编辑</a-button>
+          <a-button type="primary" @click="edit(record)">编辑</a-button>
           <a-popconfirm
               title="是否要删除所选项"
               ok-text="是"
@@ -32,32 +32,22 @@
       </a-table>
     </a-layout-content>
   </a-layout>
-  <a-modal v-model:visible="modalVisible"
-           title="新闻编辑表单"
+  <a-modal v-model:visible="modelVisible"
+           title="品牌编辑表单"
            @ok="handleModalOk"
            ok-text="确定"
            cancel-text="取消">
     <a-form
-        :model="news"
+        :model="tbBrand"
         :label-col="{ span: 8 }"
         :wrapper-col="{ span: 16 }"
     >
-      <a-form-items label="新闻类别">
-        <a-select v-model:value="news.categoryid">
-          <a-select-option v-for="item in brandList" :value="item.id" :key="item.id">
-            {{item.cname}}
-          </a-select-option>
-        </a-select>
-      </a-form-items>
-      <a-form-items label="标题">
-        <a-input v-model:value="news.title"/>
-      </a-form-items>
-      <a-form-items label="新闻摘要">
-        <a-input v-model:value="news.summary"/>
-      </a-form-items>
-      <a-form-items label="作者">
-        <a-input v-model:value="news.author"/>
-      </a-form-items>
+      <a-form-item label="品牌名字">
+        <a-input v-model:value="tbBrand.name"/>
+      </a-form-item>
+      <a-form-item label="首字母">
+        <a-input v-model:value="tbBrand.firstChar"/>
+      </a-form-item>
     </a-form>
   </a-modal>
 </template>
@@ -72,8 +62,8 @@ export default defineComponent({
   setup(){
 
     const brandList = ref();
-    const brand = ref();
-    const modelVisible = ref<boolean>(false);
+    const tbBrand = ref();
+    const modelVisible = ref(false);
     const columns =[
       {
         title: '编号',
@@ -104,7 +94,6 @@ export default defineComponent({
     });
 
     const loading = ref(false);
-    const modalVisible = ref<boolean>(false);
     //定义新闻查询函数
     const handleQuery = (params:any)=>{
       loading.value = true;
@@ -114,7 +103,6 @@ export default defineComponent({
           size:params.size
         }
       }).then((response)=> {
-        console.log("获取新闻信息"+response.data);
         loading.value = false;
         brandList.value=response.data.list;
         //重置分页按钮
@@ -130,6 +118,35 @@ export default defineComponent({
         page:pagination.current,
         size:pagination.pageSize
       })
+    }
+
+    //添加模式窗口的打开
+    const  add = ()=>{
+      modelVisible.value=true;
+      tbBrand.value={}; //初始化表单对象
+    }
+
+
+    //编辑新闻
+    const edit = (record:any) =>{
+      modelVisible.value=true;
+      tbBrand.value = record;
+
+    }
+
+    const handleModalOk =() =>{
+      axios.post("http://localhost:8899/mall-query/saveBrand",tbBrand.value).then((response)=>{
+        if (response.data.code === 200){
+          modelVisible.value=false;
+          handleQuery({
+            //添加后加载数据
+            page:pagination.value.current,
+            size:pagination.value.pageSize
+          });
+        }else {
+          message.error(response.data.message);
+        }
+      });
     }
 
     //确认删除
@@ -156,13 +173,16 @@ export default defineComponent({
     return{
       brandList,
       handleQuery,
-      brand,
-      modalVisible,
+      tbBrand,
+      modelVisible,
       loading,
       columns,
       pagination,
       handleTableChange,
-      del
+      del,
+      add,
+      edit,
+      handleModalOk
     }
   }
 });

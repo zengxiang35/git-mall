@@ -1,4 +1,4 @@
-package com.web.mall.controller;
+/*package com.web.mall.controller;
 
 import com.web.mall.pojo.TbBrand;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,4 +38,11 @@ public class TbBrandController {
         mv.addObject("editMall");
         return mv;
     }
-}
+
+    @PostMapping("/updateBrand")
+    public String updateNews(TbBrand tbBrand){
+        System.out.println(tbBrand.toString());
+        restTemplate.postForObject(QUERY_URL+"updateNews",tbBrand,String.class);
+        return "redirect:/queryBrand";
+    }
+}*/

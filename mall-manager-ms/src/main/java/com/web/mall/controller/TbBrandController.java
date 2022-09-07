@@ -9,10 +9,7 @@ import com.web.mall.pojo.RespBean;
 import com.web.mall.pojo.TbBrand;
 import com.web.mall.service.TbBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -48,5 +45,16 @@ public class TbBrandController {
     public RespBean deleteBrand(@PathVariable Long id){
         tbBrandService.deleteBrand(id);
         return  RespBean.ok("删除成功");
+    }
+
+    @PostMapping("/saveBrand")
+    public RespBean saveBrand(@RequestBody TbBrand tbBrand){
+        tbBrandService.saveBrand(tbBrand);
+        return RespBean.ok("添加成功");
+    }
+
+    @PostMapping("/updateBrand")
+    public void updateBrand(@RequestBody TbBrand tbBrand){
+        tbBrandService.updateBrand(tbBrand);
     }
 }

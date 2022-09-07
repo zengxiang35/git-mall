@@ -11,4 +11,8 @@ public interface TbBrandService {
     public TbBrand findBrandById(Long id);
 
     public void deleteBrand(Long id);
+
+    public void saveBrand(TbBrand tbBrand);
+
+    public void updateBrand(TbBrand tbBrand);
 }
